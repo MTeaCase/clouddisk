@@ -1,0 +1,14 @@
+node_modules/
+.wrangler/
+.wrangler-dist/
+dist/
+.data/
+.edge-profile/
+.shots/
+.secrets.local
+worker/.dev.vars
+worker/.data/
+tests/.worker-bundle.mjs
+tests/.dev-bundle.mjs
+*.log
+.DS_Store

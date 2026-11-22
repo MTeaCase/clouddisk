@@ -1,0 +1,46 @@
+name: Deploy static site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          cp -r web/. _site/
+          # Cloudflare 专有文件在 GitHub Pages 上无意义
+          rm -f _site/_headers _site/_routes.json
+          # GitHub Pages 没有 Pages Functions，无法同源代理 /api，
+          # 因此前端直接跨域访问 Cloudflare Pages 上的 API（Worker 已允许 CORS *）
+          cat > _site/config.js <<'EOF'
+          export const CONFIG = {
+            apiBase: "https://clouddisk-uv1.pages.dev",
+          };
+          EOF
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

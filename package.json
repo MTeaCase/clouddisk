@@ -1,0 +1,17 @@
+{
+  "name": "clouddisk",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "个人云盘：Cloudflare R2 + Workers + Pages",
+  "scripts": {
+    "test": "node tests/e2e.mjs",
+    "dev": "node scripts/dev.mjs",
+    "deploy:web": "wrangler pages deploy web --project-name clouddisk --branch main --commit-dirty=true",
+    "deploy:api": "node scripts/deploy-api.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.65.1"
+  }
+}

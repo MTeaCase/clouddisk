@@ -1,0 +1,12 @@
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1m*** Uncaught exception ***[0m
+
+  kj/filesystem-disk-win32.c++:745: failed: CreateDirectory: #5 拒绝访问。; path = miniflare-email-store
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mThe Workers runtime failed to start. There was likely a problem with the workerd binary or your configuration.[0m
+
+  Runtime stderr:
+  {"timestamp":"1795339602503","level":"error","source":"src/workerd/server/server\\entry.rs:170","message":"*** Uncaught exception ***\nkj/filesystem-disk-win32.c++:745: failed: CreateDirectory: #5 拒绝访问。; path = miniflare-email-store","context_depth":0}
+
+
+🪵  Logs were written to "C:\Users\huba\AppData\Roaming\xdg.config\.wrangler\logs\wrangler-2026-11-22_09-26-41_050.log"

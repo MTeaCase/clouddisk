@@ -1,0 +1,29 @@
+name = "clouddisk-api"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# 存储：Cloudflare R2，桶名 clouddisk（与 S3 端点 766a7c0d…r2.cloudflarestorage.com 同一账户）
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "clouddisk"
+
+[vars]
+# R2 S3 接口（用于签发浏览器直传/直读的预签名 URL）
+R2_BUCKET = "clouddisk"
+R2_ENDPOINT = "https://766a7c0d3acf63918d9747bfcf5b4802.r2.cloudflarestorage.com"
+R2_ACCOUNT_ID = "766a7c0d3acf63918d9747bfcf5b4802"
+# 10 GiB 硬上限 / 9.5 GiB 停止上传（单位：字节）
+QUOTA_HARD_BYTES = "10737418240"
+QUOTA_SOFT_BYTES = "10200690688"
+# 回收站保留天数（Cron 每天清理一次）
+TRASH_RETENTION_DAYS = "30"
+# 允许跨域的前端来源，多个用英文逗号分隔；"*" 表示全部（鉴权走 Bearer 头，不使用 Cookie）
+ALLOWED_ORIGINS = "*"
+
+[triggers]
+crons = ["0 19 * * *"]
+
+[observability]
+enabled = true
+
