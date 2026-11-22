@@ -33,7 +33,7 @@ jobs:
           # 因此前端直接跨域访问 Cloudflare Pages 上的 API（Worker 已允许 CORS *）
           cat > _site/config.js <<'EOF'
           export const CONFIG = {
-            apiBase: "https://clouddisk-uv1.pages.dev",
+            apiBase: "https://disk.mteacase.dpdns.org",
           };
           EOF
           touch _site/.nojekyll

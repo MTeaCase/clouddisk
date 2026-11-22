@@ -171,9 +171,9 @@ if (parents.length) {
 
 // 开启 Pages：由 Actions 工作流发布
 const pagesRes = await gh(`/repos/${user.login}/${repoName}/pages`, {
-  method: "POST",
-  body: JSON.stringify({ build_type: "workflow" }),
-});
+    method: "POST",
+    body: JSON.stringify({ build_type: "workflow" }),
+  }, { allow404: true }).catch((err) => ({ status: 409, body: { message: String(err.message) } }));
 if (pagesRes.status === 201 || pagesRes.status === 200) {
   console.log(`Pages 已启用：${pagesRes.body.html_url || ""}`);
 } else if (pagesRes.status === 409) {
