@@ -3,9 +3,11 @@
 单人云盘：文件存在你自己的 **Cloudflare R2** 桶里，接口跑在 **Worker** 上，界面托管在
 **Cloudflare Pages**，大文件在浏览器与 R2 之间**直连**传输。已部署并通过线上线下验收。
 
-- 入口（中国大陆可用）：**https://clouddisk-uv1.pages.dev**
+- 中国大陆入口（静态，最快）：**https://mteacase.github.io/clouddisk/**
+- 中国大陆入口（静态 + 同源 API）：**https://clouddisk-uv1.pages.dev**
 - Worker：`https://clouddisk-api.xiatianyou53.workers.dev`（大陆被 DNS 污染，只作服务端上游）
-- 登录密码 / 会话密钥 / R2 S3 密钥：见 `.secrets.local`（已 gitignore，勿提交、勿外发）
+- 密码 / 会话密钥 / R2 S3 密钥：见 `.secrets.local`（已 gitignore，勿提交、勿外发）
+- 托管方案的实测对比（Cloudflare / GitHub Pages / 腾讯 EdgeOne）：见 `docs/托管方案对比.md`
 
 > **请轮换你在对话里贴出的 R2 Access Key**：这对 S3 密钥现在作为 Worker secret 使用
 > （签发预签名 URL 必需），但它已经出现在聊天记录里，建议到 R2 控制台新建一套、
@@ -22,6 +24,8 @@
 | 经 `pages.dev` 代理转发 | **约 60 KB/s**（40 MiB 用了 11 分钟） | 40 MiB 传输被中断 | 不可用于大文件 |
 | 浏览器 ⇄ `r2.cloudflarestorage.com`（预签名） | **2.3 MB/s**（8 MiB / 3.6 s） | **2.6 MB/s** | 快 20–40 倍，稳定 |
 | `*.workers.dev` | 不可达（DNS 污染到 108.160.167.159） | 不可达 | 仅服务端可用 |
+| `*.github.io`（Fastly） | 首屏 0.9 s / app.js 1.4 s | 正常 | 静态站最快，当前主力入口 |
+| `clouddisk.edgeone.cool`（腾讯全球区） | 国内节点 0.6 s | 401 私有 | 需绑定域名后才公开 |
 
 于是定稿为：
 
@@ -153,9 +157,10 @@ clouddisk/
 ├─ web/                Pages 静态前端（原生 ES 模块，无构建）
 │  ├─ index.html · styles.css · app.js · config.js · _headers · _routes.json
 ├─ functions/api/[[path]].ts   Pages Functions → Worker 同源代理
-├─ scripts/{dev-server,deploy}.mjs
+├─ scripts/{dev-server,deploy,github-publish}.mjs
 ├─ tests/{e2e,ui,live,ui-live}.mjs + r2-mock.mjs
-└─ docs/{中国大陆访问.md,运维手册.md}
+├─ .github/workflows/pages.yml   GitHub Pages 发布（静态站备用入口）
+└─ docs/{中国大陆访问.md,托管方案对比.md,运维手册.md}
 ```
 
 ---

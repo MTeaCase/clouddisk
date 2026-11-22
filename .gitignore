@@ -12,3 +12,8 @@ tests/.worker-bundle.mjs
 tests/.dev-bundle.mjs
 *.log
 .DS_Store
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+.tef_dist/*
+  .edgebuild/

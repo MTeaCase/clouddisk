@@ -49,8 +49,12 @@ export async function onRequest(context: {
 
   const outHeaders = new Headers();
   for (const [key, value] of upstream.headers) {
-    if (/^access-control-/i.test(key)) continue;
+    // 保留 Access-Control-*：当页面托管在 github.io 等其它源时，浏览器需要这些头
     outHeaders.set(key, value);
+  }
+  // 同源部署时这些头无副作用；跨域部署时是必需的
+  if (!outHeaders.has("access-control-allow-origin")) {
+    outHeaders.set("access-control-allow-origin", "*");
   }
   return new Response(upstream.body, { status: upstream.status, headers: outHeaders });
 }
